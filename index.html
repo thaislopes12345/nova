@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Consciência Financeira Inversa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0c0c0c;
+      color: #f0f0f0;
+    }
+    header {
+      padding: 40px;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      text-align: center;
+    }
+    header h1 {
+      color: #00ffcc;
+      font-size: 2.5em;
+    }
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #00ffcc;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    canvas {
+      width: 100%;
+      height: 300px;
+      background: #111;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Consciência Financeira Inversa</h1>
+    <p>A economia do que você <strong>não gastou</strong></p>
+  </header>
+
+  <main>
+    <label>Quanto você deixou de gastar por semana (R$):</label>
+    <input type="number" id="economia" value="50" />
+
+    <label>Por quantos anos você quer simular?:</label>
+    <input type="number" id="anos" value="5" />
+
+    <button onclick="simular()">Simular Economia</button>
+
+    <h3 id="resultado"></h3>
+    <canvas id="grafico" width="800" height="300"></canvas>
+
+    <a href="painel.html">➡ Ir para o Painel do Usuário</a>
+  </main>
+
+  <script>
+    function simular() {
+      const economia = parseFloat(document.getElementById("economia").value);
+      const anos = parseInt(document.getElementById("anos").value);
+      const meses = anos * 12;
+      const juros = 0.005;
+      let saldo = 0;
+      const data = [];
+
+      for (let i = 0; i < meses; i++) {
+        saldo = saldo * (1 + juros) + economia * 4;
+        data.push(saldo.toFixed(2));
+      }
+
+      document.getElementById("resultado").innerText = `Em ${anos} anos, você teria acumulado: R$ ${saldo.toFixed(2)}`;
+
+      const canvas = document.getElementById("grafico");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, 800, 300);
+      ctx.beginPath();
+      ctx.strokeStyle = "#00ffcc";
+      ctx.lineWidth = 2;
+      ctx.moveTo(0, 300 - data[0] / 10);
+
+      for (let i = 1; i < data.length; i++) {
+        ctx.lineTo(i * (800 / data.length), 300 - data[i] / 10);
+      }
+
+      ctx.stroke();
+    }
+  </script>
+</body>
+</html>
